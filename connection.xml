@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<connection>
+  <host>localhost</host>
+  <username>postgres</username>
+  <password>321323</password>
+  <database>postgres</database>
+</connection>

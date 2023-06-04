@@ -5,7 +5,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StartupObject>database.Program</StartupObject>
+    <StartupObject>FillingDatabase.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
