@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Net;
-
-namespace database
+﻿namespace FillingDatabase
 {
     static internal class Randomizer
     {
@@ -55,7 +52,7 @@ namespace database
             String[] surnames = File.ReadAllLines("files/surnames.txt");
             String surname = surnames[random.Next(0, surnames.Length - 1)];
             surname = surname.Substring(0, 1).ToUpper() + 
-                surname.Substring(1, surname.Length - 1).ToLower() + " ";
+                surname.Substring(1, surname.Length - 1).ToLower();
             return surname;
         }
 

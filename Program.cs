@@ -1,9 +1,4 @@
-﻿using System.ComponentModel;
-using System.Xml;
-using Npgsql;
-
-
-namespace database
+﻿namespace FillingDatabase
 {
     internal static class Program
     {
@@ -13,9 +8,9 @@ namespace database
             {
                 Database connection = ConnectionDatabase();
 
-                String table = Input("Таблица");
-                Int32 countAttributes = Int32.Parse(Input("Кол-во атрибутов"));
-                Dictionary<String, String> attributes = new Dictionary<String, String>();
+                string table = Input("Таблица");
+                int countAttributes = int.Parse(Input("Кол-во атрибутов"));
+                Dictionary<string, string> attributes = new Dictionary<string, string>();
                 Console.WriteLine("\nВ дальнейшем вам будет предложено заполнить \n" +
                     "имена и типы атрибутов, которые необходимо выбрать из скобок. \n" +
                     "Если вашего типа там нет, то допустимые значения для поля \n" +
@@ -28,15 +23,15 @@ namespace database
                     "(Выбрать из списка) list,Текст1,Текст2,Текст3\n" +
                     "(Первичный ключ из другой таблицы) table,nametable\n");
 
-                for (Int32 i = 0; i < countAttributes; i += 1)
+                for (int i = 0; i < countAttributes; i += 1)
                 {
-                    String nameAttribute = Input("\nИмя колонки");
-                    String typeAttribute = Input("Тип колонки");
+                    string nameAttribute = Input("\nИмя колонки");
+                    string typeAttribute = Input("Тип колонки");
                     attributes.Add(nameAttribute, typeAttribute);
                 }
-                Int32 countRowGenerate = Int32.Parse(Input("Кол-во записей для генерации"));
+                int countRowGenerate = int.Parse(Input("Кол-во записей для генерации"));
 
-                for (Int32 i = 0; i <= countRowGenerate; i += 1)
+                for (int i = 0; i <= countRowGenerate; i += 1)
                 {
                     Console.WriteLine($"Запись {i}");
                     connection.Generate(table, attributes);
@@ -44,16 +39,16 @@ namespace database
                 Console.ReadKey();
                 Console.WriteLine("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
             }
-            
+
         }
 
-        static private String Input(String nameData)
+        static private string Input(string nameData)
         {
             Console.Write($"{nameData}: ");
             return Console.ReadLine();
         }
 
-        static internal void WriteLineColor(String line, ConsoleColor color)
+        static internal void WriteLineColor(string line, ConsoleColor color)
         {
             Console.ForegroundColor = color;
             Console.WriteLine(line);
@@ -62,12 +57,12 @@ namespace database
 
         static public Database ConnectionDatabase()
         {
-            Dictionary<String, String> connectionData = ReaderXML.GetData();
+            Dictionary<string, string> connectionData = ReaderXML.GetData();
             Database connection = new Database();
             try
             {
                 Console.Write("Подключиться ли к сохраненной базе? (0 - нет; 1 - да)\nВвод: ");
-                String check = Console.ReadLine();
+                string check = Console.ReadLine();
                 if (check == "1")
                 {
                     connection = new Database(connectionData);

@@ -1,10 +1,7 @@
 ﻿using Npgsql;
-using System;
-using System.Linq.Expressions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using String = System.String;
 
-namespace database
+namespace FillingDatabase
 {
     internal class Database
     {
@@ -24,7 +21,7 @@ namespace database
         }
         internal Database() {}
 
-        internal async void Generate(String table, Dictionary<String, String> attributes)
+        internal void Generate(String table, Dictionary<String, String> attributes)
         {
             try
             {
@@ -32,7 +29,7 @@ namespace database
             }
             catch { }
 
-            await using (var command = CONNECTION.CreateCommand())
+            using (var command = CONNECTION.CreateCommand())
             {
                 command.CommandText = "INSERT INTO \"" + table + "\" (";              
                 foreach (var key in attributes.Keys)
