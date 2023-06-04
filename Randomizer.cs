@@ -7,7 +7,7 @@
         static internal DateTime Date(Int32 Year, Int32 EndYear)
         {
             DateTime Date = new DateTime(
-                        random.Next(Year, 2023),
+                        random.Next(Year, EndYear),
                         random.Next(1, 12),
                         random.Next(1, 28)
                     );

@@ -4,9 +4,8 @@
       "commandName": "WSL2",
       "distributionName": ""
     },
-    "Профиль 1": {
-      "commandName": "Project",
-      "workingDirectory": "D:\\Проекты CSharp\\db"
+    "Профиль 2": {
+      "commandName": "Project"
     }
   }
 }
