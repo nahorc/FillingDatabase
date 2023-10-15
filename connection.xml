@@ -2,6 +2,6 @@
 <connection>
   <host>localhost</host>
   <username>postgres</username>
-  <password>321323</password>
-  <database>postgres</database>
+  <password>2242</password>
+  <database>taxi_service</database>
 </connection>

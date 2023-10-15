@@ -21,7 +21,7 @@ namespace FillingDatabase
         }
         internal Database() {}
 
-        internal void Generate(String table, Dictionary<String, String> attributes)
+        internal void Generate(String table, String schema, Dictionary<String, String> attributes)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace FillingDatabase
 
             using (var command = CONNECTION.CreateCommand())
             {
-                command.CommandText = "INSERT INTO \"" + table + "\" (";              
+                command.CommandText = "INSERT INTO " + schema + "." + table + "(";              
                 foreach (var key in attributes.Keys)
                 {
                     command.CommandText += key + ",";
@@ -46,6 +46,7 @@ namespace FillingDatabase
                 command.CommandText = command.CommandText.Substring(
                     0, command.CommandText.Length - 1);
                 command.CommandText += ");";
+
                 foreach (var attribute in attributes)
                 {
                     switch (attribute.Value)
@@ -72,7 +73,7 @@ namespace FillingDatabase
                             break;
                         case "patronymic":
                             command.Parameters.AddWithValue(
-                                "@" + attribute.Key, Randomizer.Surname() + "ович");
+                                "@" + attribute.Key, Randomizer.Name() + "ович");
                             break;
                         case "phone":
                             command.Parameters.AddWithValue(
@@ -86,22 +87,67 @@ namespace FillingDatabase
                             command.Parameters.AddWithValue(
                                 "@" + attribute.Key, Randomizer.Town());
                             break;
-                        case "address":
+                        case "adress":
                             command.Parameters.AddWithValue(
-                                "@" + attribute.Key, Randomizer.AddressNoTown());
+                                "@" + attribute.Key, Randomizer.AdressNoTown());
+                            break;
+                        case "street":
+                            command.Parameters.AddWithValue(
+                                "@" + attribute.Key, Randomizer.Street());
                             break;
                         case "boolean":
                             command.Parameters.AddWithValue(
                                 "@" + attribute.Key, Randomizer.Boolean());
                             break;
+                        case "longitude":
+                            command.Parameters.AddWithValue(
+                                "@" + attribute.Key, Double.Parse("39," + Randomizer.Degit(count:6)));
+                            break;
+                        case "latitude":
+                            command.Parameters.AddWithValue(
+                                "@" + attribute.Key, Double.Parse("47," + Randomizer.Degit(count:6)));
+                            break;
+                        case "car_plate":
+                            command.Parameters.AddWithValue(
+                                "@" + attribute.Key, Randomizer.CarPlate());
+                            break;
+                        case "car_model":
+                            command.Parameters.AddWithValue(
+                                "@" + attribute.Key, Randomizer.CarModel());
+                            break;
+                        case "region":
+                            command.Parameters.AddWithValue(
+                                "@" + attribute.Key, Randomizer.Region());
+                            break;
+                        case "car_brand":
+                            command.Parameters.AddWithValue(
+                                "@" + attribute.Key, Randomizer.CarBrand());
+                            break;
                         default:
                             String[] parameters = attribute.Value.Split(",");
                             switch (parameters[0])
                             {
+                                //start_time,start_time,end_time,(ГодНачало),(ГодКонец),(МаксМинутРазница)
+                                case "start_time":
+                                    Int32 year = Randomizer.Int(Int32.Parse(parameters[3]), Int32.Parse(parameters[4]));
+                                    DateTime startTime = Randomizer.DateTime(year);
+
+                                    command.Parameters.AddWithValue(
+                                        "@" + parameters[1], startTime);
+                                    command.Parameters.AddWithValue(
+                                        "@" + parameters[2], Randomizer.NextDateTime(startTime, Int32.Parse(parameters[5])));
+                                    break;
+                                case "end_time":
+                                    break;
                                 case "int":
                                     command.Parameters.AddWithValue(
                                         "@" + attribute.Key, Randomizer.Int(
                                             Int32.Parse(parameters[1]), Int32.Parse(parameters[2])));
+                                    break;
+                                case "int_random":
+                                    command.Parameters.AddWithValue(
+                                        "@" + attribute.Key, Randomizer.Degit(
+                                            count: Int32.Parse(parameters[1])));
                                     break;
                                 case "table":
                                     String[] primaryKeys = GetPrimaryKeys(parameters[1]);
@@ -142,6 +188,25 @@ namespace FillingDatabase
                 }
             }
             Close();
+        }
+
+        internal DateTime SelectDateTime(String query)
+        {
+            using (var command = new NpgsqlCommand(query, CONNECTION))
+            using (var reader = command.ExecuteReader())
+            {
+                reader.Read();
+                return Convert.ToDateTime(reader[0]);
+            }
+        }
+        internal Double SelectDouble(String query)
+        {
+            using (var command = new NpgsqlCommand(query, CONNECTION))
+            using (var reader = command.ExecuteReader())
+            {
+                reader.Read();
+                return Convert.ToDouble(reader[0]);
+            }
         }
 
         internal String[] GetPrimaryKeys(String table)

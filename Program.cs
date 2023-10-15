@@ -4,11 +4,14 @@
     {
         static public void Main(string[] args)
         {
+            Console.WriteLine(Randomizer.CarPlate());
+
             while (true)
             {
                 Database connection = ConnectionDatabase();
 
                 string table = Input("Таблица");
+                string schema = Input("Схема");
                 int countAttributes = int.Parse(Input("Кол-во атрибутов"));
                 Dictionary<string, string> attributes = new Dictionary<string, string>();
                 Console.WriteLine("\nВ дальнейшем вам будет предложено заполнить \n" +
@@ -16,9 +19,10 @@
                     "Если вашего типа там нет, то допустимые значения для поля \n" +
                     "атрибута следует указать через запятую (Строковые значения).\n " +
                     "Также существуют особые типы, требующие уточнения диапозона через запятую.\n" +
-                    "Обычные типы: name, surname, patronymic, phone, email, passport, SNILS, workbook, town, address, boolean" +
+                    "Обычные типы: name, surname, patronymic, phone, int_random, email, passport, region,\nSNILS, workbook, town, adress, street, boolean, car_plate, car_brand, car_model\n" +
                     "Особые типы и их вид записи:\n" +
                     "(Рандомное число) int,1,1502\n" +
+                    "(Рандомные числа с нулем) int_random,4\n" + 
                     "(Дата на рандом год) date,2020,2023\n" +
                     "(Выбрать из списка) list,Текст1,Текст2,Текст3\n" +
                     "(Первичный ключ из другой таблицы) table,nametable\n");
@@ -31,10 +35,10 @@
                 }
                 int countRowGenerate = int.Parse(Input("Кол-во записей для генерации"));
 
-                for (int i = 0; i <= countRowGenerate; i += 1)
+                for (int i = 1; i <= countRowGenerate; i += 1)
                 {
                     Console.WriteLine($"Запись {i}");
-                    connection.Generate(table, attributes);
+                    connection.Generate(table, schema, attributes);
                 }
                 Console.ReadKey();
                 Console.WriteLine("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");

@@ -1,4 +1,6 @@
-﻿namespace FillingDatabase
+﻿using Microsoft.VisualBasic;
+
+namespace FillingDatabase
 {
     static internal class Randomizer
     {
@@ -19,10 +21,31 @@
             return Convert.ToBoolean(Int(0, 1));
         }
 
-        static internal String AddressNoTown()
+        static internal String Degit(String result = "", Int32 count = 1)
+        {
+            if(count == 1)
+            {
+                return result + random.Next(0, 9);
+            }
+            return Degit(result + random.Next(0, 9), count - 1);
+        }
+
+        static internal String AdressNoTown()
         {
             String[] towns = File.ReadAllLines("files/towns.txt");
-            return "ул. " + towns[random.Next(0, towns.Length - 1)] + "ская д." + Int(1, 200);
+            return "ул. " + Street() + " д." + Int(1, 200);
+        }
+
+        static internal String Street()
+        {
+            String[] towns = File.ReadAllLines("files/towns.txt");
+            return towns[random.Next(0, towns.Length - 1)] + "ская";
+        }
+
+        static internal String Region()
+        {
+            String[] towns = File.ReadAllLines("files/towns.txt");
+            return towns[random.Next(0, towns.Length - 1)] + "ский";
         }
 
         static internal String Town()
@@ -42,9 +65,40 @@
 
         static internal String Phone()
         {
-            return "+7(9" + Int(10, 99) + ")" +
-                Int(100, 999) + "-" + Int(10, 99) 
-                + "-" + Int(10, 99);
+            return "9" + Int(1000, 9999) + Int(10000, 99999);
+        }
+
+        static internal String CarPlate()
+        {
+            return Convert.ToString((char)random.Next('A', 'Z')) + Degit(count:3) + Convert.ToString((char)random.Next('A', 'Z')) + Convert.ToString((char)random.Next('A', 'Z')) + Degit(count:3);
+        }
+
+        static internal String CarBrand()
+        {
+            String[] brends = File.ReadAllLines("files/brand_car.txt");
+            return brends[random.Next(0, brends.Length - 1)];
+        }
+
+        static internal DateTime DateTime(Int32 year)
+        {
+            while(true)
+            {
+                try
+                {
+                    return (new DateTime(year, Int(1, 12), Int(1, 31), Int(0, 23), Int(0, 60), Int(0, 60)));
+                } catch { }
+            }
+        }
+
+        static internal DateTime NextDateTime(DateTime dateTime, Int32 maxCountMinute)
+        {
+            return dateTime.AddMinutes(Int(30, maxCountMinute));
+        }
+
+        static internal String CarModel()
+        {
+            String[] cars = File.ReadAllLines("files/model_car.txt");
+            return cars[random.Next(0, cars.Length - 1)];
         }
 
         static internal String Surname()
